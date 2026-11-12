@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>บทเรียนโต้ตอบ: การป้องกันอุบัติเหตุและเตรียมอุปกรณ์งานเชื่อม</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            bg: '#F4F7F9',
+                            card: '#FFFFFF',
+                            primary: '#3B82F6',
+                            primaryDark: '#1D4ED8',
+                            accent: '#0EA5E9',
+                            secondary: '#64748B',
+                            success: '#10B981',
+                            warning: '#F59E0B',
+                            danger: '#EF4444',
+                            lightBlue: '#E0F2FE',
+                            lightGreen: '#D1FAE5',
+                            lightYellow: '#FEF3C7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #F4F7F9;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom Scrollbar for inner cards */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        /* Pulse Animation for Hotspots */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .hotspot-pulse {
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased flex flex-col min-h-screen pb-20 select-none">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 shadow-sm">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow">
+                    ง
+                </div>
+                <div>
+                    <h1 class="text-xs font-semibold text-slate-500">ง 30285 งานเชื่อมโลหะฯ</h1>
+                    <h2 class="text-sm font-bold text-slate-800 leading-tight">การป้องกันอุบัติเหตุ & การเตรียมอุปกรณ์</h2>
+                </div>
+            </div>
+            <div id="studentBadge" class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium border border-slate-200 truncate max-w-[110px]">
+                ยังไม่ลงทะเบียน
+            </div>
+        </div>
+        <!-- Overall Progress Bar -->
+        <div class="max-w-md mx-auto mt-2 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+            <div id="overallProgressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-4">
+
+        <!-- Student Information Modal / Card (Shows if not registered) -->
+        <section id="studentRegistrationCard" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 text-center relative overflow-hidden">
+            <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 rounded-full pointer-events-none"></div>
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">ข้อมูลผู้เรียน</h3>
+            <p class="text-xs text-slate-500 mt-1 mb-4">กรุณากรอกข้อมูลเพื่อบันทึกผลการประเมินการเรียนรู้</p>
+            <form id="regForm" class="space-y-3 text-left">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อ - สกุล</label>
+                    <input type="text" id="regName" required placeholder="นายสมชาย ใจดี" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">ระดับชั้น</label>
+                        <select id="regClass" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                            <option value="ม.4/1">ม.4/1</option>
+                            <option value="ม.4/2">ม.4/2</option>
+                            <option value="ม.5/1">ม.5/1</option>
+                            <option value="ม.5/2">ม.5/2</option>
+                            <option value="ม.6/1">ม.6/1</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">เลขที่</label>
+                        <input type="number" id="regNo" min="1" max="50" required placeholder="1" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                    </div>
+                </div>
+                <button type="submit" class="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-md active:scale-[0.98] transition min-h-[44px]">
+                    เริ่มเรียนรู้บทเรียน
+                </button>
+            </form>
+        </section>
+
+        <!-- SECTION 1: INTERACTIVE LESSON (ใบความรู้) -->
+        <section id="sectionLesson" class="tab-content hidden space-y-4">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-4 text-white shadow-md relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="bg-white/20 backdrop-blur text-xs px-2.5 py-0.5 rounded-full font-medium">ส่วนที่ 1</span>
+                    <h3 class="text-lg font-bold mt-1">บทเรียนอินเทอร์แอคทีฟ</h3>
+                    <p class="text-xs text-blue-100 mt-0.5">การป้องกันอุบัติเหตุและหลัก 5 ขั้นตอน "ป-ส-อ-ส-ค"</p>
+                </div>
+                <svg class="absolute -right-4 -bottom-4 w-32 h-32 opacity-15 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            </div>
+
+            <!-- Knowledge Accordions / Interactive Cards -->
+            <div class="space-y-3">
+                
+                <!-- Topic 1: Cause of Accidents -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleAccordion('acc1')" class="w-full p-4 flex items-center justify-between bg-slate-50/50 hover:bg-slate-100/50 transition min-h-[44px]">
+                        <div class="flex items-center space-x-3 text-left">
+                            <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800">1. สาเหตุของอุบัติเหตุงานเชื่อม</h4>
+                                <p class="text-xs text-slate-500">สถิติจากสถาบันความปลอดภัย</p>
+                            </div>
+                        </div>
+                        <svg id="acc1-icon" class="w-5 h-5 text-slate-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="acc1" class="hidden p-4 border-t border-slate-100 text-xs text-slate-600 space-y-3">
+                        <p class="leading-relaxed">อุบัติเหตุส่วนใหญ่เกิดจาก 2 ปัจจัยหลัก ซึ่งสามารถป้องกันได้หากมีความตระหนักรู้:</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-center">
+                                <span class="block text-2xl font-extrabold text-rose-600">85%</span>
+                                <span class="font-bold text-rose-800 block mt-0.5">การกระทำที่ไม่ปลอดภัย</span>
+                                <span class="text-[10px] text-rose-600">Unsafe Acts (เช่น ไม่สวม PPE, ประมาท)</span>
+                            </div>
+                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+                                <span class="block text-2xl font-extrabold text-amber-600">15%</span>
+                                <span class="font-bold text-amber-800 block mt-0.5">สภาพการณ์ที่ไม่ปลอดภัย</span>
+                                <span class="text-[10px] text-amber-600">Unsafe Conditions (เช่น สายไฟชำรุด, ชื้นแฉะ)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic 2: 4 Main Hazards -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleAccordion('acc2')" class="w-full p-4 flex items-center justify-between bg-slate-50/50 hover:bg-slate-100/50 transition min-h-[44px]">
+                        <div class="flex items-center space-x-3 text-left">
+                            <div class="w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800">2. อันตรายหลัก 4 ด้านและการป้องกัน</h4>
+                                <p class="text-xs text-slate-500">ไฟฟ้า แสงอาร์ก อัคคีภัย ควันพิษ</p>
+                            </div>
+                        </div>
+                        <svg id="acc2-icon" class="w-5 h-5 text-slate-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="acc2" class="hidden p-4 border-t border-slate-100 space-y-2.5 text-xs">
+                        <div class="p-2.5 bg-blue-50/60 rounded-xl border border-blue-100">
+                            <span class="font-bold text-blue-900 block">⚡ 1. กระแสไฟฟ้าดูด (Electric Shock)</span>
+                            <p class="text-slate-600 mt-1">ป้องกันโดยใช้ฉนวนหัวจับที่ไม่แตก สวมถุงมือหนังแห้งสนิท และห้ามทำบนพื้นชื้นแฉะ</p>
+                        </div>
+                        <div class="p-2.5 bg-indigo-50/60 rounded-xl border border-indigo-100">
+                            <span class="font-bold text-indigo-900 block">🕶️ 2. รังสีและแสงอาร์ก (UV / Infrared)</span>
+                            <p class="text-slate-600 mt-1">ทำลายสายตาและผิวหนัง ป้องกันด้วยหน้ากากเชื่อมกระจกกรองแสง <strong class="text-indigo-700">เบอร์ 10 - 12</strong></p>
+                        </div>
+                        <div class="p-2.5 bg-amber-50/60 rounded-xl border border-amber-100">
+                            <span class="font-bold text-amber-900 block">🔥 3. สะเก็ดไฟและอัคคีภัย (Sparks & Fire)</span>
+                            <p class="text-slate-600 mt-1">กำจัดวัสดุไวไฟ (ทินเนอร์ เศษกระดาษ) นอกรัศมี <strong class="text-amber-700">อย่างน้อย 3 เมตร</strong></p>
+                        </div>
+                        <div class="p-2.5 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                            <span class="font-bold text-emerald-900 block">💨 4. ควันพิษและก๊าซ (Fumes & Gases)</span>
+                            <p class="text-slate-600 mt-1">ฟลักซ์ที่ไหม้จะเกิดควันพิษ ต้องทำงานในพื้นที่ถ่ายเทอากาศดี หรือมีระบบดูดควัน</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic 3: 5 Steps Checklist (ป-ส-อ-ส-ค) -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleAccordion('acc3')" class="w-full p-4 flex items-center justify-between bg-slate-50/50 hover:bg-slate-100/50 transition min-h-[44px]">
+                        <div class="flex items-center space-x-3 text-left">
+                            <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 font-extrabold text-base">
+                                ป
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800">3. สูตรจดจำ 5 ขั้นตอน "ป-ส-อ-ส-ค"</h4>
+                                <p class="text-xs text-slate-500">การเตรียมความพร้อมก่อนปฏิบัติงาน</p>
+                            </div>
+                        </div>
+                        <svg id="acc3-icon" class="w-5 h-5 text-slate-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="acc3" class="hidden p-4 border-t border-slate-100 space-y-2 text-xs">
+                        <div class="flex items-start space-x-2.5 p-2 bg-slate-50 rounded-xl">
+                            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">ป</span>
+                            <div>
+                                <strong class="text-slate-800">ปิดไฟ / ปลอดเชื้อเพลิง:</strong> สวิตช์ตู้เชื่อมปิดก่อนตรวจ เคลียร์สารไวไฟรัศมี 3 เมตร
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2.5 p-2 bg-slate-50 rounded-xl">
+                            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">ส</span>
+                            <div>
+                                <strong class="text-slate-800">สวมเกราะครบ:</strong> หน้ากาก (กระจกใส+ดำ #10-12), ถุงมือหนังแห้ง, กางเกงคลุมทับรองเท้าเซฟตี้, แว่นใสเคาะสแลก
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2.5 p-2 bg-slate-50 rounded-xl">
+                            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">อ</span>
+                            <div>
+                                <strong class="text-slate-800">อาร์กแน่น / ฉนวนดี:</strong> หัวจับลวดฉนวนสมบูรณ์ สปริงแน่น สายเชื่อมไม่ฉีกขาด
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2.5 p-2 bg-slate-50 rounded-xl">
+                            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">ส</span>
+                            <div>
+                                <strong class="text-slate-800">สายดินหนีบตึง:</strong> ปากคีบสปริงแข็งแรง ขั้วต่อแน่น ไม่ร้อนสะสม
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2.5 p-2 bg-slate-50 rounded-xl">
+                            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">ค</span>
+                            <div>
+                                <strong class="text-slate-800">เครื่องมือพร้อม:</strong> ค้อนเคาะสแลกด้ามแน่น, แปรงลวด, คีมจับชิ้นงานร้อน
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Button to Next Step -->
+            <button onclick="switchTab('sim')" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-md flex items-center justify-center space-x-2 hover:bg-blue-700 active:scale-[0.98] transition min-h-[44px]">
+                <span>ไปที่จำลองสถานการณ์ (เก็บคะแนน S)</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+        </section>
+
+        <!-- SECTION 2: INTERACTIVE SIMULATION (สถานการณ์จำลอง S=1) -->
+        <section id="sectionSim" class="tab-content hidden space-y-4">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-4 text-white shadow-md relative overflow-hidden">
+                <div class="relative z-10 flex items-center justify-between">
+                    <div>
+                        <span class="bg-white/20 backdrop-blur text-xs px-2.5 py-0.5 rounded-full font-medium">ส่วนที่ 2</span>
+                        <h3 class="text-lg font-bold mt-1">สถานการณ์จำลองปฏิบัติงาน</h3>
+                        <p class="text-xs text-emerald-100 mt-0.5">ทดสอบทักษะกระบวนการ (คะแนนเก็บ S = 1.00)</p>
+                    </div>
+                    <div class="text-right bg-white/10 backdrop-blur p-2 rounded-xl">
+                        <span class="text-[10px] text-emerald-100 block">คะแนนทักษะ S</span>
+                        <span id="simScoreDisplay" class="text-xl font-extrabold">0.00 / 1.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation Task Switcher -->
+            <div class="flex border-b border-slate-200 bg-white rounded-xl p-1 shadow-sm">
+                <button id="task1TabBtn" onclick="switchSimTask(1)" class="flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition">
+                    ภารกิจ 1: เช็กอุปกรณ์ PPE
+                </button>
+                <button id="task2TabBtn" onclick="switchSimTask(2)" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition">
+                    ภารกิจ 2: ตรวจจุดบกพร่อง (5 จุด)
+                </button>
+            </div>
+
+            <!-- TASK 1: PPE CHECK SIMULATION -->
+            <div id="simTask1" class="space-y-3">
+                <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
+                    <h4 class="text-sm font-bold text-slate-800 mb-1">ภารกิจที่ 1: ตรวจสอบและเลือก PPE ให้ถูกต้อง</h4>
+                    <p class="text-xs text-slate-500 mb-3">ตอบคำถามเลือกการแต่งกายและอุปกรณ์ความปลอดภัย 4 ข้อ</p>
+                    
+                    <div id="ppeQuestionsContainer" class="space-y-4">
+                        <!-- Questions dynamically injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TASK 2: STATION DEFECT INSPECTOR SIMULATION (INTERACTIVE SVG HOTSPOTS) -->
+            <div id="simTask2" class="hidden space-y-3">
+                <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-sm font-bold text-slate-800">ภารกิจที่ 2: ตรวจสถานีเชื่อม & ค้นหา 5 จุดบกพร่อง</h4>
+                        <span id="defectsFoundCount" class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">พบ 0 / 5 จุด</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">กดที่จุดวงกลมสีแดงบนภาพเพื่อแก้ไขจุดอันตรายให้ปลอดภัย</p>
+
+                    <!-- Interactive Station SVG Canvas -->
+                    <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-xl overflow-hidden border-2 border-slate-700 shadow-inner">
+                        
+                        <!-- SVG Welding Station Illustration -->
+                        <svg class="w-full h-full" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background Booth Wall & Floor -->
+                            <rect width="400" height="230" fill="#1e293b"/>
+                            <rect y="230" width="400" height="70" fill="#334155"/>
+                            <line x1="0" y1="230" x2="400" y2="230" stroke="#475569" stroke-width="2"/>
+                            
+                            <!-- Steel Table -->
+                            <rect x="130" y="160" width="180" height="12" fill="#64748b" rx="2"/>
+                            <rect x="140" y="172" width="12" height="70" fill="#475569"/>
+                            <rect x="288" y="172" width="12" height="70" fill="#475569"/>
+                            
+                            <!-- Welding Machine -->
+                            <rect x="30" y="120" width="80" height="110" fill="#2563eb" rx="6"/>
+                            <rect x="40" y="130" width="60" height="25" fill="#1e3a8a" rx="3"/>
+                            <circle cx="55" cy="142.5" r="5" fill="#60a5fa"/>
+                            <circle cx="85" cy="142.5" r="5" fill="#34d399"/>
+                            
+                            <!-- Switch on Machine (Defect 1 Hotspot Area) -->
+                            <g id="svgSwitchGroup">
+                                <rect x="55" y="165" width="30" height="18" fill="#0f172a" rx="2"/>
+                                <rect id="svgSwitchToggle" x="72" y="167" width="11" height="14" fill="#ef4444" rx="1"/>
+                                <text id="svgSwitchText" x="42" y="178" fill="#f87171" font-size="9" font-weight="bold">ON</text>
+                            </g>
+
+                            <!-- Ground Cable & Clamp (Defect 4 Hotspot Area) -->
+                            <path id="svgGroundCable" d="M 50 210 Q 80 250 145 220" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" fill="none"/>
+                            <g id="svgGroundClamp" transform="translate(140, 212)">
+                                <path d="M 0 0 L 15 -5 L 12 12 L 0 5 Z" fill="#94a3b8"/>
+                            </g>
+
+                            <!-- Electrode Cable & Holder (Defect 3 Hotspot Area) -->
+                            <path id="svgWeldingCable" d="M 90 210 Q 120 260 200 166" stroke="#ef4444" stroke-width="6" stroke-linecap="round" fill="none"/>
+                            <!-- Cable Defect exposed copper mark -->
+                            <circle id="svgCopperExposed" cx="150" cy="225" r="4" fill="#fb923c" stroke="#dc2626" stroke-width="1.5"/>
+                            <!-- Electrode holder on table -->
+                            <g id="svgHolderGroup" transform="translate(195, 150)">
+                                <rect x="0" y="0" width="30" height="10" fill="#1e293b" rx="2"/>
+                                <rect x="25" y="2" width="20" height="6" fill="#fbbf24"/>
+                            </g>
+
+                            <!-- Flammable Thinner Bucket & Paper (Defect 2 Hotspot Area) -->
+                            <g id="svgFlammableGroup" transform="translate(230, 185)">
+                                <rect x="0" y="10" width="28" height="35" fill="#dc2626" rx="3"/>
+                                <text x="3" y="32" fill="#ffffff" font-size="8" font-weight="bold">THINNER</text>
+                                <path d="M 32 30 L 48 25 L 45 42 L 30 40 Z" fill="#f8fafc"/>
+                            </g>
+
+                            <!-- Insulator Hook on Wall -->
+                            <path d="M 115 80 L 115 100 Q 115 110 125 110" stroke="#94a3b8" stroke-width="3" fill="none"/>
+
+                            <!-- Tools on Table (Defect 5 Hotspot Area) -->
+                            <g id="svgToolsGroup" transform="translate(240, 148)">
+                                <!-- Slag hammer with loose handle -->
+                                <rect x="0" y="4" width="22" height="5" fill="#78350f"/>
+                                <path d="M 18 0 L 26 6 L 18 12 Z" fill="#475569"/>
+                            </g>
+                        </svg>
+
+                        <!-- HOTSPOT INTERACTIVE BUTTONS -->
+                        <!-- Hotspot 1: Switch -->
+                        <button onclick="inspectDefect(1)" id="hotspot1" class="absolute top-[52%] left-[15%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-rose-500/80 border-2 border-white flex items-center justify-center text-white font-bold text-xs shadow-lg hotspot-pulse min-h-[44px] min-w-[44px]">
+                            1
+                        </button>
+
+                        <!-- Hotspot 2: Flammables -->
+                        <button onclick="inspectDefect(2)" id="hotspot2" class="absolute top-[68%] left-[62%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-rose-500/80 border-2 border-white flex items-center justify-center text-white font-bold text-xs shadow-lg hotspot-pulse min-h-[44px] min-w-[44px]">
+                            2
+                        </button>
+
+                        <!-- Hotspot 3: Damaged Cable -->
+                        <button onclick="inspectDefect(3)" id="hotspot3" class="absolute top-[73%] left-[38%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-rose-500/80 border-2 border-white flex items-center justify-center text-white font-bold text-xs shadow-lg hotspot-pulse min-h-[44px] min-w-[44px]">
+                            3
+                        </button>
+
+                        <!-- Hotspot 4: Ground Clamp -->
+                        <button onclick="inspectDefect(4)" id="hotspot4" class="absolute top-[72%] left-[48%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-rose-500/80 border-2 border-white flex items-center justify-center text-white font-bold text-xs shadow-lg hotspot-pulse min-h-[44px] min-w-[44px]">
+                            4
+                        </button>
+
+                        <!-- Hotspot 5: Tools & Slag Hammer -->
+                        <button onclick="inspectDefect(5)" id="hotspot5" class="absolute top-[48%] left-[65%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-rose-500/80 border-2 border-white flex items-center justify-center text-white font-bold text-xs shadow-lg hotspot-pulse min-h-[44px] min-w-[44px]">
+                            5
+                        </button>
+
+                    </div>
+
+                    <!-- Defect Checklist Detail Output -->
+                    <div id="defectLog" class="space-y-2 mt-3">
+                        <div class="text-xs font-semibold text-slate-600">รายการจุดบกพร่องที่ต้องแก้ไข:</div>
+                        <div id="logItem1" class="text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                            <span>1. สวิตช์ตู้เชื่อมเปิดค้างไว้ก่อนตรวจเช็ก</span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md">ยังไม่แก้</span>
+                        </div>
+                        <div id="logItem2" class="text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                            <span>2. ถังทินเนอร์และเศษกระดาษใกล้อาณาบริเวณเชื่อม</span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md">ยังไม่แก้</span>
+                        </div>
+                        <div id="logItem3" class="text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                            <span>3. ฉนวนสายเชื่อมฉีกขาดและพาดบนโต๊ะเหล็ก</span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md">ยังไม่แก้</span>
+                        </div>
+                        <div id="logItem4" class="text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                            <span>4. ปากคีบสายดินสปริงหลวม ขั้วต่อคลอน</span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md">ยังไม่แก้</span>
+                        </div>
+                        <div id="logItem5" class="text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+                            <span>5. ค้อนเคาะสแลกด้ามหลวม และขาดคีมจับชิ้นงานร้อน</span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md">ยังไม่แก้</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Action Button to Next Step -->
+            <button onclick="switchTab('test')" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md flex items-center justify-center space-x-2 hover:bg-emerald-700 active:scale-[0.98] transition min-h-[44px]">
+                <span>ไปที่แบบทดสอบหลังเรียน (เก็บคะแนน K)</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+        </section>
+
+        <!-- SECTION 3: POST-TEST (แบบทดสอบหลังเรียน 10 ข้อ K=1) -->
+        <section id="sectionTest" class="tab-content hidden space-y-4">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-4 text-white shadow-md relative overflow-hidden">
+                <div class="relative z-10 flex items-center justify-between">
+                    <div>
+                        <span class="bg-white/20 backdrop-blur text-xs px-2.5 py-0.5 rounded-full font-medium">ส่วนที่ 3</span>
+                        <h3 class="text-lg font-bold mt-1">แบบทดสอบหลังเรียน</h3>
+                        <p class="text-xs text-purple-100 mt-0.5">วัดความรู้ความเข้าใจ (คะแนนเก็บ K = 1.00)</p>
+                    </div>
+                    <div class="text-right bg-white/10 backdrop-blur p-2 rounded-xl">
+                        <span class="text-[10px] text-purple-100 block">ข้อที่</span>
+                        <span id="quizProgressText" class="text-xl font-extrabold">1 / 10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Card -->
+            <div id="quizCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between text-xs text-slate-500 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-purple-600">คำถามปรนัย 4 ตัวเลือก</span>
+                    <span id="quizCategoryBadge" class="bg-purple-50 text-purple-700 px-2 py-0.5 rounded-md font-medium">แผนการเรียนรู้ที่ 2</span>
+                </div>
+                
+                <h4 id="quizQuestionText" class="text-sm font-bold text-slate-800 leading-snug">
+                    คำถามจะแสดงที่นี่...
+                </h4>
+
+                <!-- Options -->
+                <div id="quizOptionsContainer" class="space-y-2.5">
+                    <!-- Options buttons injected via JS -->
+                </div>
+
+                <!-- Immediate Explanation Feedback Box -->
+                <div id="quizFeedbackBox" class="hidden p-3.5 rounded-xl border text-xs leading-relaxed space-y-1">
+                    <div id="quizFeedbackTitle" class="font-bold flex items-center space-x-1.5"></div>
+                    <p id="quizFeedbackReason" class="text-slate-600"></p>
+                </div>
+
+                <!-- Next Quiz Button -->
+                <button id="btnNextQuiz" onclick="nextQuestion()" class="hidden w-full bg-purple-600 text-white font-bold py-3 rounded-xl shadow hover:bg-purple-700 active:scale-[0.98] transition min-h-[44px]">
+                    ข้อถัดไป
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 4: SCORE REPORT & ANALYTICS (รายงานผล) -->
+        <section id="sectionReport" class="tab-content hidden space-y-4">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-4 text-white shadow-md relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="bg-white/20 backdrop-blur text-xs px-2.5 py-0.5 rounded-full font-medium">ส่วนที่ 4</span>
+                    <h3 class="text-lg font-bold mt-1">สรุปผลการเรียนรู้ & ใบประเมิน</h3>
+                    <p class="text-xs text-slate-300 mt-0.5">ผลการประเมินคะแนนเก็บประจำแผนการเรียนรู้ที่ 2</p>
+                </div>
+            </div>
+
+            <!-- Score Certificate Card -->
+            <div id="certificateCard" class="bg-white rounded-2xl p-5 border-2 border-slate-200 shadow-md space-y-4 text-center relative overflow-hidden">
+                <!-- Evaluation Watermark Stamp -->
+                <div id="passStamp" class="hidden absolute top-4 right-4 transform rotate-12 border-4 border-emerald-500 text-emerald-600 font-extrabold text-xs px-3 py-1.5 rounded-xl uppercase tracking-wider opacity-80 pointer-events-none">
+                    ผ่านเกณฑ์ 80%
+                </div>
+                <div id="failStamp" class="hidden absolute top-4 right-4 transform rotate-12 border-4 border-rose-500 text-rose-600 font-extrabold text-xs px-3 py-1.5 rounded-xl uppercase tracking-wider opacity-80 pointer-events-none">
+                    ต้องปรับปรุง
+                </div>
+
+                <!-- Student Profile Info -->
+                <div class="border-b border-slate-100 pb-3">
+                    <h4 id="reportStudentName" class="text-base font-bold text-slate-800">ยังไม่ได้ลงทะเบียน</h4>
+                    <p id="reportStudentDetail" class="text-xs text-slate-500 mt-0.5">ชั้น: - | เลขที่: -</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">วิชา: งานเชื่อมโลหะด้วยลวดเชื่อมหุ้มฟลักซ์ (ง 30285)</p>
+                </div>
+
+                <!-- Score Breakdown Grid -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-purple-50 border border-purple-100 rounded-xl p-3 text-center">
+                        <span class="text-[11px] font-semibold text-purple-700 block">ด้านความรู้ (K)</span>
+                        <span id="reportKScore" class="text-2xl font-extrabold text-purple-900 block my-0.5">0.00</span>
+                        <span class="text-[10px] text-purple-600 block">เต็ม 1.00 คะแนน</span>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-center">
+                        <span class="text-[11px] font-semibold text-emerald-700 block">ด้านทักษะ (S)</span>
+                        <span id="reportSScore" class="text-2xl font-extrabold text-emerald-900 block my-0.5">0.00</span>
+                        <span class="text-[10px] text-emerald-600 block">เต็ม 1.00 คะแนน</span>
+                    </div>
+                </div>
+
+                <!-- Total Score & Percentage -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                    <div class="flex justify-between items-center text-xs text-slate-600 mb-1">
+                        <span class="font-semibold">รวมคะแนนเก็บประจำแผนที่ 2</span>
+                        <span id="reportPercentage" class="font-bold text-blue-600 text-sm">0%</span>
+                    </div>
+                    <div class="text-3xl font-black text-slate-800 my-1">
+                        <span id="reportTotalScore">0.00</span> <span class="text-base font-normal text-slate-500">/ 2.00</span>
+                    </div>
+                    <!-- Status Badge -->
+                    <div id="evaluationResultBadge" class="mt-2 text-xs font-bold py-1.5 px-3 rounded-lg bg-slate-200 text-slate-700">
+                        กรุณาทำแบบทดสอบและสถานการณ์จำลอง
+                    </div>
+                </div>
+
+                <!-- Recommendations / Analytics -->
+                <div class="text-left bg-blue-50/50 rounded-xl p-3 border border-blue-100 text-xs text-slate-600 space-y-1">
+                    <span class="font-bold text-blue-900 block">💡 ข้อเสนอแนะการพัฒนา:</span>
+                    <p id="reportFeedbackText" class="leading-relaxed text-[11px]">
+                        สืบค้นทบทวนเนื้อหาขั้นตอนการเตรียมความพร้อม 5 ขั้นตอน "ป-ส-อ-ส-ค" เพื่อเสริมสร้างความปลอดภัยในการปฏิบัติงาน
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-2 pt-2">
+                    <button onclick="copySummaryReport()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl shadow hover:bg-slate-900 active:scale-[0.98] transition flex items-center justify-center space-x-2 min-h-[44px]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        <span>คัดลอกผลคะแนนส่งครู</span>
+                    </button>
+                    <button onclick="restartCourse()" class="w-full bg-slate-100 text-slate-700 font-semibold py-2.5 rounded-xl hover:bg-slate-200 active:scale-[0.98] transition text-xs min-h-[44px]">
+                        เริ่มทำทบทวนบทเรียนอีกครั้ง
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Notification Toast -->
+    <div id="toastNotification" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-full shadow-xl font-medium hidden transition-opacity duration-300 opacity-0 pointer-events-none">
+        คัดลอกผลคะแนนเรียบร้อยแล้ว!
+    </div>
+
+    <!-- Bottom Navigation Bar (Mobile 100%) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-2 py-1 shadow-lg">
+        <div class="max-w-md mx-auto grid grid-cols-4 gap-1">
+            <button onclick="switchTab('lesson')" id="nav-lesson" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-blue-600 font-medium transition min-h-[44px]">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span class="text-[10px]">บทเรียน</span>
+            </button>
+            <button onclick="switchTab('sim')" id="nav-sim" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 font-medium transition min-h-[44px]">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7a6 6 0 01-9.4 0m9.4 0a6 6 0 00-9.4 0M12 14v4m0 0h2m-2 0H10m4-11a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span class="text-[10px]">จำลอง (S)</span>
+            </button>
+            <button onclick="switchTab('test')" id="nav-test" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 font-medium transition min-h-[44px]">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="text-[10px]">ทดสอบ (K)</span>
+            </button>
+            <button onclick="switchTab('report')" id="nav-report" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 font-medium transition min-h-[44px]">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z"></path></svg>
+                <span class="text-[10px]">ผลการเรียน</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // APP STATE
+        const state = {
+            student: {
+                name: '',
+                class: 'ม.4/1',
+                number: ''
+            },
+            currentTab: 'lesson',
+            progress: {
+                lessonViewed: false,
+                ppeAnswers: {},
+                defectsFixed: [false, false, false, false, false],
+                quizAnswers: {}
+            },
+            quizIndex: 0,
+            scores: {
+                kRaw: 0, // max 10
+                sRaw: 0, // max 9 (4 PPE + 5 Defects)
+                kFinal: 0.0, // max 1.00
+                sFinal: 0.0, // max 1.00
+                total: 0.0,  // max 2.00
+                percentage: 0,
+                passed: false
+            }
+        };
+
+        // PPE QUESTION DATA (Task 1 Simulation)
+        const ppeQuestions = [
+            {
+                id: 1,
+                question: "1. การเลือกเลนส์กระจกกรองแสงสำหรับงานเชื่อมด้วยลวดเชื่อมหุ้มฟลักซ์ควรเลือกเบอร์ใด?",
+                options: [
+                    { text: "กระจกใสอย่างเดียว", correct: false, reason: "กระจกใสป้องกันเพียงสะเก็ดไฟ ไม่สามารถกรองรังสี UV/Infrared จากแสงอาร์กได้" },
+                    { text: "กระจกกรองแสงเบอร์ 10 - 12 ประกบกระจกใส", correct: true, reason: "ถูกต้อง! เบอร์ 10-12 เหมาะสมกับความเข้มแสงอาร์กเชื่อมไฟฟ้า และกระจกใสช่วยป้องกันสะเก็ดไฟกระแทกกระจกดำ" },
+                    { text: "กระจกกรองแสงเบอร์ 5 สำหรับงานตัดแก๊ส", correct: false, reason: "เบอร์ 5 มีความเข้มส่องผ่านต่ำเกินไป ไม่เพียงพอสำหรับแสงอาร์กเชื่อมไฟฟ้า" }
+                ]
+            },
+            {
+                id: 2,
+                question: "2. ถุงมือหนังที่เหมาะสมสำหรับการปฏิบัติงานเชื่อมควรมีลักษณะอย่างไร?",
+                options: [
+                    { text: "ถุงมือผ้าถักธรรมดาเพื่อระบายอากาศ", correct: false, reason: "ถุงมือผ้าไม่สามารถกันความร้อน สะเก็ดไฟ และป้องกันไฟฟ้าดูดได้" },
+                    { text: "ถุงมือหนังที่แห้งสนิท ไร้รอยฉีกขาด", correct: true, reason: "ถูกต้อง! ถุงมือหนังแห้งเป็นฉนวนไฟฟ้าที่ดี หากเปียกชื้นความต้านทานจะลดลงเสี่ยงไฟดูด" },
+                    { text: "ถุงมือหนังชุบน้ำให้เปียกเพื่อคลายความร้อน", correct: false, reason: "ความชื้นจะทำให้น้ำเป็นตัวนำไฟฟ้า เสี่ยงถูกไฟฟ้าดูดอย่างรุนแรง!" }
+                ]
+            },
+            {
+                id: 3,
+                question: "3. การแต่งกายสวมกางเกงและรองเท้านิรภัยที่ปลอดภัยที่สุดคือข้อใด?",
+                options: [
+                    { text: "ยัดขากางเกงเข้าไปในรองเท้านิรภัย", correct: false, reason: "สะเก็ดไฟที่ตกลงมาอาจไหลเข้าไปสะสมภายในรองเท้าทำให้เท้าพองได้" },
+                    { text: "สวมขากางเกงคลุมทับด้านนอกรองเท้านิรภัย", correct: true, reason: "ถูกต้อง! การให้ขากางเกงคลุมทับด้านนอกจะช่วยให้สะเก็ดไฟร่วงหล่นลงพื้น ไม่ตกลงไปในรองเท้า" },
+                    { text: "พับขากางเกงขึ้นเหนือดวงรองเท้า", correct: false, reason: "การพับทบขากางเกงเป็นร่องจะกลายเป็นที่รองรับสะเก็ดไฟร้อน" }
+                ]
+            },
+            {
+                id: 4,
+                question: "4. เมื่อต้องทำขั้นตอนเคาะสแลก (Slag) ออกจากแนวเชื่อม ต้องสวมใส่อุปกรณ์ใด?",
+                options: [
+                    { text: "แว่นตานิรภัยชนิดใส (Clear Safety Glasses)", correct: true, reason: "ถูกต้อง! สแลกที่เคาะอาจปลิวด้วยความเร็วสูงเข้าตา ต้องสวมแว่นใสเพื่อป้องกัน" },
+                    { text: "ถอดหน้ากากออกแล้วมองด้วยตาเปล่า", correct: false, reason: "อันตรายอย่างยิ่ง! เศษสแลกร้อนอาจกระเด็นเข้าตาทำให้ตาบอดได้" },
+                    { text: "สวมหน้ากากเชื่อมกระจกดำเบอร์ 12", correct: false, reason: "กระจกดำมืดเกินไป ทำให้มองไม่เห็นตำแหน่งเคาะ ทำให้เกิดอันตรายได้" }
+                ]
+            }
+        ];
+
+        // POST-TEST QUESTION DATA (10 Questions - K Score)
+        const quizQuestions = [
+            {
+                q: "1. จากสถิติอุบัติเหตุในงานอุตสาหกรรม สาเหตุหลักที่เกิดจาก 'การกระทำที่ไม่ปลอดภัย' (Unsafe Act) คิดเป็นร้อยละเท่าใด?",
+                options: ["ร้อยละ 15", "ร้อยละ 50", "ร้อยละ 85", "ร้อยละ 100"],
+                answer: 2,
+                reason: "สาเหตุอุบัติเหตุร้อยละ 85 เกิดจากการกระทำที่ไม่ปลอดภัยของผู้ปฏิบัติงาน เช่น ความประมาท การไม่สวม PPE ส่วนอีก 15% เกิดจากสภาพการณ์ที่ไม่ปลอดภัย"
+            },
+            {
+                q: "2. ในการเชื่อมด้วยลวดเชื่อมหุ้มฟลักซ์ กระจกกรองแสงสำหรับหน้ากากเชื่อมควรใช้ระดับความเข้มเบอร์ใด?",
+                options: ["เบอร์ 4 - 6", "เบอร์ 7 - 9", "เบอร์ 10 - 12", "เบอร์ 14 - 16"],
+                answer: 2,
+                reason: "กระจกกรองแสงเบอร์ 10 - 12 เป็นระดับความเข้มที่เหมาะสมในการป้องกันรังสีรุนแรง (UV และ Infrared) จากแสงอาร์กงานเชื่อมไฟฟ้า"
+            },
+            {
+                q: "3. เพื่อป้องกันอัคคีภัยจากสะเก็ดไฟเชื่อม ต้องจัดพื้นที่เคลียร์วัสดุไวไฟออกนอกรัศมีอย่างน้อยกี่เมตร?",
+                options: ["1 เมตร", "3 เมตร", "5 เมตร", "10 เมตร"],
+                answer: 1,
+                reason: "ต้องจัดพื้นที่ให้ปลอดสารไวไฟ เช่น ทินเนอร์ น้ำมัน เศษกระดาษ ในรัศมีอย่างน้อย 3 เมตร รอบบริเวณสถานีงานเชื่อม"
+            },
+            {
+                q: "4. การแต่งกายชุดปฏิบัติงานเชื่อมข้อใดถูกต้องในการป้องกันสะเก็ดไฟตกลงในรองเท้า?",
+                options: [
+                    "พับขากางเกงขึ้น 2 ทบ",
+                    "ยัดขากางเกงใส่ในขอบรองเท้า",
+                    "ปล่อยขากางเกงคลุมทับด้านนอกรองเท้านิรภัย",
+                    "ตัดขากางเกงให้สั้นเหนือข้อเท้า"
+                ],
+                answer: 2,
+                reason: "การปล่อยขากางเกงคลุมทับด้านนอกรองเท้านิรภัยจะช่วยให้สะเก็ดไฟร่วงไถลลงสู่พื้น ไม่ไหลตกเข้าไปสะสมภายในรองเท้า"
+            },
+            {
+                q: "5. ตัวอักษร 'ป' แรก ในรหัสจำ 5 ขั้นตอน 'ป-ส-อ-ส-ค' หมายถึงข้อใด?",
+                options: [
+                    "ปรับกระแสไฟให้สูงสุด",
+                    "ปิดสวิตช์ไฟ และ ปลอดวัสดุไวไฟ",
+                    "แปรงลวดพร้อมขัด",
+                    "เปิดพัดลมระบายอากาศ"
+                ],
+                answer: 1,
+                reason: "'ป' แรก หมายถึง ปิดสวิตช์เครื่องเชื่อมก่อนการตรวจเช็กอุปกรณ์ และกำจัดวัสดุไวไฟออกจากพื้นที่"
+            },
+            {
+                q: "6. หากพบสายเชื่อมมีรอยฉนวนฉีกขาดจนเห็นเส้นทองแดง ผู้ปฏิบัติงานควรแก้ไขอย่างไร?",
+                options: [
+                    "ใช้เทปใสพันปิดรอยฉาก",
+                    "เชื่อมต่อไปตามปกติโดยไม่สัมผัสตรงรอยขาด",
+                    "ปิดสวิตช์เครื่องเชื่อม และแจ้งช่างบำรุงรักษาเปลี่ยนสายใหม่ทันที",
+                    "เอาน้ำสาดเพื่อลดความร้อน"
+                ],
+                answer: 2,
+                reason: "ห้ามใช้งานสายเชื่อมที่ฉนวนฉีกขาดเด็ดขาดเพราะเสี่ยงต่อการเกิดไฟดูดและไฟฟ้าลัดวงจร ต้องปิดสวิตช์ไฟและเปลี่ยนสายใหม่ฉนวนสมบูรณ์"
+            },
+            {
+                q: "7. เหตุใดการหนีบปากคีบสายดิน (Ground Clamp) จึงต้องหนีบให้แน่นและขั้วต่อตึงกระชับ?",
+                options: [
+                    "เพื่อป้องกันไม่ให้สายเชื่อมหลุดหาย",
+                    "เพื่อลดความต้านทานไฟฟ้าและป้องกันความร้อนสะสมที่ขั้วต่อ",
+                    "เพื่อประหยัดลวดเชื่อม",
+                    "เพื่อเพิ่มความเร็วในการเคาะสแลก"
+                ],
+                answer: 1,
+                reason: "หากจุดต่อสายดินหลวม จะเกิดความต้านทานไฟฟ้าสูง ทำให้กระแสไฟกระตุก อาร์กไม่สม่ำเสมอ และเกิดความร้อนสะสมจนขั้วต่อไหม้ได้"
+            },
+            {
+                q: "8. ในขั้นตอนการเคาะสแลก (Slag) ป้องกันอันตรายเข้าตา ต้องสวมใส่อุปกรณ์ใด?",
+                options: [
+                    "แว่นตานิรภัยชนิดใส",
+                    "หน้ากากเชื่อมกระจกดำเบอร์ 11",
+                    "แว่นกันแดดแฟชั่น",
+                    "ไม่ต้องสวมอุปกรณ์ใดๆ"
+                ],
+                answer: 0,
+                reason: "การเคาะสแลกต้องมองเห็นชิ้นงานชัดเจน จึงต้องสวมแว่นตานิรภัยชนิดใสเพื่อป้องกันเศษสแลกร้อนกระเด็นเข้าตา"
+            },
+            {
+                q: "9. การนำหัวจับลวดเชื่อม (Electrode Holder) ไปใช้คีบจับชิ้นงานที่ร้อนจัดจะส่งผลเสียอย่างไร?",
+                options: [
+                    "ทำให้แนวเชื่อมสวยงามขึ้น",
+                    "ทำให้ฉนวนหัวจับเสื่อมสภาพ ด้ามจับไหม้ชำรุด และเสี่ยงโดนไฟดูด",
+                    "ทำให้เครื่องเชื่อมประหยัดไฟ",
+                    "ไม่มีผลเสียใดๆ"
+                ],
+                answer: 1,
+                reason: "หัวจับลวดเชื่อมมีฉนวนทนความร้อนเฉพาะ หากนำไปคีบชิ้นงานร้อนโดยตรง จะทำให้ฉนวนกรอบแตก ไหม้ ชำรุด จนไม่สามารถป้องกันไฟดูดได้"
+            },
+            {
+                q: "10. หากผู้ปฏิบัติงานสวมถุงมือหนังที่เปียกชื้นขณะทำการเชื่อมไฟฟ้า จะส่งผลอย่างไร?",
+                options: [
+                    "จับหัวจับลวดเชื่อมได้กระชับยิ่งขึ้น",
+                    "เสี่ยงต่อการถูกกระแสไฟฟ้าดูดอย่างรุนแรงเนื่องจากความต้านทานไฟฟ้าลดลง",
+                    "ช่วยให้ลวดเชื่อมหลอมละลายเร็วขึ้น",
+                    "ช่วยป้องกันรังสี UV ได้ดีขึ้น"
+                ],
+                answer: 1,
+                reason: "น้ำและความชื้นเป็นตัวนำไฟฟ้าชั้นดี เมื่อถุงมือเปียกความต้านทานไฟฟ้าจะลดลงต่ำมาก ทำให้กระแสไฟไหลผ่านร่างกายเข้าสู่ดินเกิดไฟดูดอันตรายถึงชีวิต"
+            }
+        ];
+
+        // INITIALIZATION ON DOM LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            initRegForm();
+            renderPPEQuestions();
+            renderQuizQuestion();
+            updateOverallProgress();
+        });
+
+        // REGISTRATION HANDLER
+        function initRegForm() {
+            const form = document.getElementById('regForm');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                state.student.name = document.getElementById('regName').value.trim();
+                state.student.class = document.getElementById('regClass').value;
+                state.student.number = document.getElementById('regNo').value;
+
+                if (state.student.name) {
+                    document.getElementById('studentRegistrationCard').classList.add('hidden');
+                    document.getElementById('studentBadge').textContent = `${state.student.name} (${state.student.class})`;
+                    showToast('ลงทะเบียนสำเร็จ! เริ่มเรียนรู้ได้เลย');
+                    updateOverallProgress();
+                }
+            });
+        }
+
+        // TAB SWITCHING LOGIC
+        function switchTab(tabId) {
+            state.currentTab = tabId;
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected section
+            if (tabId === 'lesson') {
+                document.getElementById('sectionLesson').classList.remove('hidden');
+                state.progress.lessonViewed = true;
+            } else if (tabId === 'sim') {
+                document.getElementById('sectionSim').classList.remove('hidden');
+            } else if (tabId === 'test') {
+                document.getElementById('sectionTest').classList.remove('hidden');
+            } else if (tabId === 'report') {
+                calculateScores();
+                updateReportUI();
+                document.getElementById('sectionReport').classList.remove('hidden');
+            }
+
+            // Update bottom nav styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-blue-600');
+                btn.classList.add('text-slate-400');
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-400');
+                activeNav.classList.add('text-blue-600');
+            }
+
+            updateOverallProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ACCORDION TOGGLE
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(`${id}-icon`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // SIMULATION TASK SWITCHING
+        function switchSimTask(taskNum) {
+            const btn1 = document.getElementById('task1TabBtn');
+            const btn2 = document.getElementById('task2TabBtn');
+            const task1 = document.getElementById('simTask1');
+            const task2 = document.getElementById('simTask2');
+
+            if (taskNum === 1) {
+                btn1.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition";
+                btn2.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition";
+                task1.classList.remove('hidden');
+                task2.classList.add('hidden');
+            } else {
+                btn2.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition";
+                btn1.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition";
+                task2.classList.remove('hidden');
+                task1.classList.add('hidden');
+            }
+        }
+
+        // RENDER PPE CHECK QUESTIONS (Task 1)
+        function renderPPEQuestions() {
+            const container = document.getElementById('ppeQuestionsContainer');
+            container.innerHTML = '';
+
+            ppeQuestions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2";
+                
+                let optionsHtml = item.options.map((opt, optIdx) => `
+                    <button onclick="answerPPE(${item.id}, ${optIdx})" id="ppe-btn-${item.id}-${optIdx}" class="w-full text-left p-2.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-xs text-slate-700 transition flex items-start space-x-2 min-h-[44px]">
+                        <span class="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${String.fromCharCode(65 + optIdx)}</span>
+                        <span>${opt.text}</span>
+                    </button>
+                `).join('');
+
+                qDiv.innerHTML = `
+                    <h5 class="text-xs font-bold text-slate-800">${item.question}</h5>
+                    <div class="space-y-1.5">${optionsHtml}</div>
+                    <div id="ppe-fb-${item.id}" class="hidden p-2.5 rounded-lg text-[11px] leading-relaxed"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        // HANDLE PPE ANSWER
+        function answerPPE(qId, optIdx) {
+            const question = ppeQuestions.find(q => q.id === qId);
+            const selectedOpt = question.options[optIdx];
+            const fbBox = document.getElementById(`ppe-fb-${qId}`);
+
+            // Store state
+            state.progress.ppeAnswers[qId] = selectedOpt.correct;
+
+            // Highlight buttons
+            question.options.forEach((opt, idx) => {
+                const btn = document.getElementById(`ppe-btn-${qId}-${idx}`);
+                btn.disabled = true;
+                if (idx === optIdx) {
+                    if (opt.correct) {
+                        btn.className = "w-full text-left p-2.5 rounded-lg border-2 border-emerald-500 bg-emerald-50 text-xs font-semibold text-emerald-900 transition flex items-start space-x-2";
+                    } else {
+                        btn.className = "w-full text-left p-2.5 rounded-lg border-2 border-rose-400 bg-rose-50 text-xs font-semibold text-rose-900 transition flex items-start space-x-2";
+                    }
+                }
+            });
+
+            // Show feedback
+            fbBox.classList.remove('hidden');
+            if (selectedOpt.correct) {
+                fbBox.className = "p-2.5 rounded-lg text-[11px] leading-relaxed bg-emerald-100 text-emerald-900 border border-emerald-200";
+                fbBox.innerHTML = `<strong>✓ถูกต้อง!</strong> ${selectedOpt.reason}`;
+            } else {
+                fbBox.className = "p-2.5 rounded-lg text-[11px] leading-relaxed bg-rose-100 text-rose-900 border border-rose-200";
+                fbBox.innerHTML = `<strong>✕ยังไม่ถูกต้อง:</strong> ${selectedOpt.reason}`;
+            }
+
+            calculateScores();
+        }
+
+        // STATION DEFECT INSPECTION (Task 2 Interactive SVG Hotspots)
+        function inspectDefect(defectIndex) {
+            const idx = defectIndex - 1;
+            if (state.progress.defectsFixed[idx]) {
+                showToast(`จุดที่ ${defectIndex} ได้รับการแก้ไขถูกต้องแล้ว`);
+                return;
+            }
+
+            state.progress.defectsFixed[idx] = true;
+            const hotspotBtn = document.getElementById(`hotspot${defectIndex}`);
+            
+            // Visual Hotspot Update
+            hotspotBtn.classList.remove('bg-rose-500/80', 'hotspot-pulse');
+            hotspotBtn.classList.add('bg-emerald-500', 'border-emerald-200');
+            hotspotBtn.innerHTML = '✓';
+
+            // SVG Dynamic Transformations & Feedback
+            const logItem = document.getElementById(`logItem${defectIndex}`);
+            logItem.className = "text-xs p-2.5 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 flex items-center justify-between font-medium";
+
+            if (defectIndex === 1) {
+                // Switch OFF
+                document.getElementById('svgSwitchToggle').setAttribute('x', '57');
+                document.getElementById('svgSwitchToggle').setAttribute('fill', '#10b981');
+                document.getElementById('svgSwitchText').textContent = 'OFF';
+                document.getElementById('svgSwitchText').setAttribute('fill', '#34d399');
+                logItem.innerHTML = `<span>1. ปิดสวิตช์เครื่องเชื่อมเป็น OFF เรียบร้อย</span> <span class="text-[10px] font-bold text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded-md">แก้ไขแล้ว</span>`;
+                showToast('แก้ไขจุดที่ 1: ปิดสวิตช์เครื่องเชื่อมเพื่อความปลอดภัย!');
+            } else if (defectIndex === 2) {
+                // Move Thinner out of 3m
+                document.getElementById('svgFlammableGroup').setAttribute('transform', 'translate(340, 240) scale(0.6)');
+                logItem.innerHTML = `<span>2. ย้ายถังทินเนอร์และสารไวไฟออกนอกรัศมี 3 เมตร</span> <span class="text-[10px] font-bold text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded-md">แก้ไขแล้ว</span>`;
+                showToast('แก้ไขจุดที่ 2: เคลียร์สารไวไฟออกจากรัศมี 3 เมตร!');
+            } else if (defectIndex === 3) {
+                // Hang Cable & hide exposed copper
+                document.getElementById('svgCopperExposed').setAttribute('fill', '#10b981');
+                document.getElementById('svgWeldingCable').setAttribute('d', 'M 90 210 Q 115 110 120 100 T 195 150');
+                logItem.innerHTML = `<span>3. แจ้งเปลี่ยนสายเชื่อม และนำขึ้นแขวนฉนวนขอแขวน</span> <span class="text-[10px] font-bold text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded-md">แก้ไขแล้ว</span>`;
+                showToast('แก้ไขจุดที่ 3: แขวนสายเชื่อมบนฉนวนเรียบร้อย!');
+            } else if (defectIndex === 4) {
+                // Tighten Ground Clamp
+                document.getElementById('svgGroundClamp').setAttribute('transform', 'translate(270, 160)');
+                document.getElementById('svgGroundCable').setAttribute('d', 'M 50 210 Q 180 250 270 166');
+                logItem.innerHTML = `<span>4. เปลี่ยนปากคีบสายดินสปริงแน่น หนีบตึงกับโต๊ะเชื่อม</span> <span class="text-[10px] font-bold text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded-md">แก้ไขแล้ว</span>`;
+                showToast('แก้ไขจุดที่ 4: ขันขั้วต่อและหนีบปากคีบสายดินตึงแน่น!');
+            } else if (defectIndex === 5) {
+                // Fix Hammer & add Tongs
+                logItem.innerHTML = `<span>5. ซ่อมด้ามค้อนเคาะสแลกแน่นหนา และเตรียมคีมจับชิ้นงานร้อน</span> <span class="text-[10px] font-bold text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded-md">แก้ไขแล้ว</span>`;
+                showToast('แก้ไขจุดที่ 5: เครื่องมือประกอบพร้อมใช้งานปลอดภัย!');
+            }
+
+            // Update Counter
+            const countFixed = state.progress.defectsFixed.filter(Boolean).length;
+            document.getElementById('defectsFoundCount').textContent = `พบ ${countFixed} / 5 จุด`;
+
+            calculateScores();
+        }
+
+        // RENDER POST-TEST QUESTION (Section 3)
+        function renderQuizQuestion() {
+            const q = quizQuestions[state.quizIndex];
+            document.getElementById('quizProgressText').textContent = `${state.quizIndex + 1} / ${quizQuestions.length}`;
+            document.getElementById('quizQuestionText').textContent = q.q;
+
+            const container = document.getElementById('quizOptionsContainer');
+            container.innerHTML = '';
+
+            const isAnswered = state.progress.quizAnswers.hasOwnProperty(state.quizIndex);
+            const answeredOptIdx = state.progress.quizAnswers[state.quizIndex];
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `quiz-opt-${idx}`;
+                btn.onclick = () => answerQuiz(idx);
+                btn.className = "w-full text-left p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 text-xs text-slate-800 transition flex items-center justify-between min-h-[44px]";
+                
+                btn.innerHTML = `
+                    <div class="flex items-center space-x-2.5">
+                        <span class="w-6 h-6 rounded-lg bg-white border border-slate-300 font-bold text-slate-600 flex items-center justify-center text-xs shrink-0">${idx + 1}</span>
+                        <span class="font-medium">${optText}</span>
+                    </div>
+                `;
+
+                if (isAnswered) {
+                    btn.disabled = true;
+                    if (idx === q.answer) {
+                        btn.className = "w-full text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-xs font-semibold text-emerald-900 flex items-center justify-between";
+                    } else if (idx === answeredOptIdx) {
+                        btn.className = "w-full text-left p-3 rounded-xl border-2 border-rose-400 bg-rose-50 text-xs font-semibold text-rose-900 flex items-center justify-between";
+                    }
+                }
+
+                container.appendChild(btn);
+            });
+
+            // Feedback box reset
+            const fbBox = document.getElementById('quizFeedbackBox');
+            const btnNext = document.getElementById('btnNextQuiz');
+
+            if (isAnswered) {
+                fbBox.classList.remove('hidden');
+                btnNext.classList.remove('hidden');
+
+                const isCorrect = answeredOptIdx === q.answer;
+                const fbTitle = document.getElementById('quizFeedbackTitle');
+                const fbReason = document.getElementById('quizFeedbackReason');
+
+                if (isCorrect) {
+                    fbBox.className = "p-3.5 rounded-xl border text-xs leading-relaxed space-y-1 bg-emerald-50 border-emerald-200 text-emerald-900";
+                    fbTitle.innerHTML = `<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>ถูกต้อง! (+0.10 คะแนน K)</span>`;
+                } else {
+                    fbBox.className = "p-3.5 rounded-xl border text-xs leading-relaxed space-y-1 bg-rose-50 border-rose-200 text-rose-900";
+                    fbTitle.innerHTML = `<svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> <span>คำตอบยังไม่ถูกต้อง</span>`;
+                }
+                fbReason.textContent = q.reason;
+
+                if (state.quizIndex === quizQuestions.length - 1) {
+                    btnNext.textContent = "ดูใบสรุปผลการเรียนรู้";
+                } else {
+                    btnNext.textContent = "ข้อถัดไป";
+                }
+            } else {
+                fbBox.classList.add('hidden');
+                btnNext.classList.add('hidden');
+            }
+        }
+
+        // HANDLE QUIZ ANSWER
+        function answerQuiz(optIdx) {
+            if (state.progress.quizAnswers.hasOwnProperty(state.quizIndex)) return;
+
+            state.progress.quizAnswers[state.quizIndex] = optIdx;
+            renderQuizQuestion();
+            calculateScores();
+        }
+
+        // NEXT QUESTION
+        function nextQuestion() {
+            if (state.quizIndex < quizQuestions.length - 1) {
+                state.quizIndex++;
+                renderQuizQuestion();
+            } else {
+                switchTab('report');
+            }
+        }
+
+        // SCORE CALCULATION ALGORITHM
+        function calculateScores() {
+            // 1. K Score (Knowledge): 10 questions -> 1.00 score max (0.10 each)
+            let kCorrectCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (state.progress.quizAnswers[idx] === q.answer) {
+                    kCorrectCount++;
+                }
+            });
+            state.scores.kRaw = kCorrectCount;
+            state.scores.kFinal = (kCorrectCount / 10) * 1.00;
+
+            // 2. S Score (Skill): 4 PPE + 5 Defects = 9 items -> 1.00 score max
+            let ppeCorrectCount = 0;
+            Object.values(state.progress.ppeAnswers).forEach(val => {
+                if (val === true) ppeCorrectCount++;
+            });
+            const defectsFixedCount = state.progress.defectsFixed.filter(Boolean).length;
+
+            state.scores.sRaw = ppeCorrectCount + defectsFixedCount; // max 9
+            state.scores.sFinal = (state.scores.sRaw / 9) * 1.00;
+
+            // 3. Total & Evaluation (Pass threshold 80% = 1.60 out of 2.00)
+            state.scores.total = state.scores.kFinal + state.scores.sFinal;
+            state.scores.percentage = Math.round((state.scores.total / 2.00) * 100);
+            state.scores.passed = state.scores.total >= 1.60;
+
+            // Update Sim Score Display Live
+            document.getElementById('simScoreDisplay').textContent = `${state.scores.sFinal.toFixed(2)} / 1.00`;
+            updateOverallProgress();
+        }
+
+        // UPDATE REPORT SECTION UI
+        function updateReportUI() {
+            document.getElementById('reportStudentName').textContent = state.student.name || "นักเรียน (ยังไม่ลงชื่อ)";
+            document.getElementById('reportStudentDetail').textContent = `ระดับชั้น: ${state.student.class} | เลขที่: ${state.student.number || '-'}`;
+
+            document.getElementById('reportKScore').textContent = state.scores.kFinal.toFixed(2);
+            document.getElementById('reportSScore').textContent = state.scores.sFinal.toFixed(2);
+            document.getElementById('reportTotalScore').textContent = state.scores.total.toFixed(2);
+            document.getElementById('reportPercentage').textContent = `${state.scores.percentage}%`;
+
+            const badge = document.getElementById('evaluationResultBadge');
+            const passStamp = document.getElementById('passStamp');
+            const failStamp = document.getElementById('failStamp');
+            const feedbackText = document.getElementById('reportFeedbackText');
+
+            if (state.scores.passed) {
+                badge.className = "mt-2 text-xs font-bold py-1.5 px-3 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-300";
+                badge.textContent = "ผ่านเกณฑ์การประเมิน (ดีเยี่ยม ≥ 80%)";
+                passStamp.classList.remove('hidden');
+                failStamp.classList.add('hidden');
+                feedbackText.textContent = "ยอดเยี่ยมมาก! ท่านมีความรู้ความเข้าใจในหลักความปลอดภัยและการเตรียมความพร้อมอุปกรณ์เชื่อม 5 ขั้นตอน (ป-ส-อ-ส-ค) และสามารถค้นหาจุดบกพร่องปฏิบัติงานได้ครบถ้วน";
+            } else {
+                badge.className = "mt-2 text-xs font-bold py-1.5 px-3 rounded-lg bg-rose-100 text-rose-800 border border-rose-300";
+                badge.textContent = "ยังไม่ผ่านเกณฑ์ (ต้องได้ตั้งแต่ 1.60 คะแนนขึ้นไป)";
+                passStamp.classList.add('hidden');
+                failStamp.classList.remove('hidden');
+                feedbackText.textContent = "ควรสืบค้นทบทวนบทเรียนในส่วนที่ 1 และทดลองค้นหาจุดบกพร่องในสถานการณ์จำลองซ้ำอีกครั้ง เพื่อเสริมสร้างความปลอดภัยก่อนลงมือปฏิบัติงานจริง";
+            }
+        }
+
+        // OVERALL PROGRESS BAR UPDATE
+        function updateOverallProgress() {
+            let totalSteps = 1 + 9 + 10; // 1 Reg + 9 Sim + 10 Quiz
+            let completed = 0;
+
+            if (state.student.name) completed += 1;
+            completed += state.scores.sRaw;
+            completed += Object.keys(state.progress.quizAnswers).length;
+
+            let pct = Math.round((completed / totalSteps) * 100);
+            if (pct > 100) pct = 100;
+
+            document.getElementById('overallProgressBar').style.width = `${pct}%`;
+        }
+
+        // COPY SUMMARY REPORT TEXT (Safe ExecCommand fallback for iframe)
+        function copySummaryReport() {
+            const textToCopy = `=== สรุปผลการเรียนรู้อินเทอร์แอคทีฟ ===
+วิชา: งานเชื่อมโลหะด้วยลวดเชื่อมหุ้มฟลักซ์ (ง 30285)
+แผนการเรียนรู้ที่ 2: การป้องกันอุบัติเหตุและเตรียมอุปกรณ์
+---------------------------------------
+ชื่อผู้เรียน: ${state.student.name || 'ไม่ระบุ'}
+ชั้น: ${state.student.class} เลขที่: ${state.student.number || '-'}
+---------------------------------------
+• คะแนนความรู้ (K): ${state.scores.kFinal.toFixed(2)} / 1.00 (ตอบถูก ${state.scores.kRaw}/10 ข้อ)
+• คะแนนทักษะ (S): ${state.scores.sFinal.toFixed(2)} / 1.00 (ผ่านจำลอง ${state.scores.sRaw}/9 รายการ)
+• คะแนนรวม: ${state.scores.total.toFixed(2)} / 2.00 คะแนน (${state.scores.percentage}%)
+• ผลการประเมิน: ${state.scores.passed ? 'ผ่านเกณฑ์ (✓)' : 'ยังไม่ผ่านเกณฑ์ (✕)'}
+=======================================`;
+
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = textToCopy;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            showToast('คัดลอกสรุปผลคะแนนเรียบร้อยแล้ว!');
+        }
+
+        // TOAST NOTIFICATION UTILITY
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.remove('opacity-0');
+            }, 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2500);
+        }
+
+        // RESTART COURSE
+        function restartCourse() {
+            state.quizIndex = 0;
+            state.progress.ppeAnswers = {};
+            state.progress.defectsFixed = [false, false, false, false, false];
+            state.progress.quizAnswers = {};
+            
+            // Reset hotspots
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`hotspot${i}`);
+                btn.className = "absolute w-8 h-8 rounded-full bg-rose-500/80 border-2 border-white flex items-center justify-center text-white font-bold text-xs shadow-lg hotspot-pulse min-h-[44px] min-w-[44px]";
+                btn.textContent = i;
+            }
+
+            // Reset SVG elements
+            document.getElementById('svgSwitchToggle').setAttribute('x', '72');
+            document.getElementById('svgSwitchToggle').setAttribute('fill', '#ef4444');
+            document.getElementById('svgSwitchText').textContent = 'ON';
+            document.getElementById('svgSwitchText').setAttribute('fill', '#f87171');
+
+            document.getElementById('svgFlammableGroup').setAttribute('transform', 'translate(230, 185)');
+            document.getElementById('svgCopperExposed').setAttribute('fill', '#fb923c');
+            document.getElementById('svgWeldingCable').setAttribute('d', 'M 90 210 Q 120 260 200 166');
+            document.getElementById('svgGroundClamp').setAttribute('transform', 'translate(140, 212)');
+            document.getElementById('svgGroundCable').setAttribute('d', 'M 50 210 Q 80 250 145 220');
+
+            // Reset logs
+            for (let i = 1; i <= 5; i++) {
+                const log = document.getElementById(`logItem${i}`);
+                log.className = "text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between";
+                log.querySelector('span:last-child').className = "text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md";
+                log.querySelector('span:last-child').textContent = "ยังไม่แก้";
+            }
+            document.getElementById('defectsFoundCount').textContent = "พบ 0 / 5 จุด";
+
+            renderPPEQuestions();
+            renderQuizQuestion();
+            calculateScores();
+            switchTab('lesson');
+            showToast('เริ่มทำทบทวนบทเรียนใหม่แล้ว');
+        }
+    </script>
+</body>
+</html>
